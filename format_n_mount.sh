@@ -28,6 +28,8 @@ determine_boot()
     else
         boot_sys="BIOS"
     fi
+
+    echo -e "\n\n"
 }
 
 create_partition_table() 
@@ -54,6 +56,8 @@ create_partition_table()
 
     echo "Creating HOME partition..."
     parted -s "$largest_disk" mkpart primary ext4 49664MiB 100%
+
+    echo -e "\n\n"
 }
 
 change_partition_types()
@@ -69,6 +73,8 @@ change_partition_types()
 #    parted -s "$largest_disk" name 2 'SWAP'
 #    parted -s "$largest_disk" name 3 'ROOT'
 #    parted -s "$largest_disk" name 4 'HOME'
+
+    echo -e "\n\n"
 }
 
 create_fs()
@@ -94,6 +100,8 @@ create_fs()
 
     echo "Formatting HOME partition as ext4..."
     mkfs.ext4 "${disk_partition}4"
+
+    echo -e "\n\n"
 }
 
 mount_partitions()
@@ -105,21 +113,23 @@ mount_partitions()
     swapon "${disk_partition}2"
 
     echo "Mounting ROOT partition to /mnt..."
-    mount /dev/sda3 /mnt/boot
+    mount /dev/sda3 /mnt/
 
     echo "Mounting HOME partition to /mnt/home..."
     mount --mkdir /dev/sda4 /mnt/home
+
+    echo -e "\n\n"
 }
 
 verify_partition_table() 
 {
     echo "Displaying created structure of ${largest_disk}:"
     parted "$largest_disk" print
-    echo "\n\n"
+    echo -e "\n\n"
 
     echo "Check for correct mount points:"
-    fdisk -l "$largest_disk"
-    echo "\n\n"
+    lsblk "$largest_disk"
+    echo -e "\n\n"
 }
 
 # Check if script is being run as root
