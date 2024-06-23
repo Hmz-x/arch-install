@@ -62,10 +62,13 @@ change_partition_types()
         parted -s "$largest_disk" set 1 boot on
     fi
 
-    echo "Setting partition names..."
-    parted -s "$largest_disk" name 1 'BOOT'
-    parted -s "$largest_disk" name 3 'ROOT'
-    parted -s "$largest_disk" name 4 'HOME'
+#   Setting partition names does not work on my BIOS system as of current..
+#   Error: loop disk labels do not support partition name.
+#    echo "Setting partition names..."
+#    parted -s "$largest_disk" name 1 'BOOT'
+#    parted -s "$largest_disk" name 2 'SWAP'
+#    parted -s "$largest_disk" name 3 'ROOT'
+#    parted -s "$largest_disk" name 4 'HOME'
 }
 
 create_fs()
@@ -95,25 +98,28 @@ create_fs()
 
 mount_partitions()
 {
-    echo "Mounting ROOT partition to /mnt..."
-    mount -L ROOT /mnt
-
-    echo "Mounting HOME partition to /mnt/home..."
-    mkdir -p /mnt/home
-    mount -L HOME /mnt/home
-
     echo "Mounting BOOT partition to /mnt/boot..."
-    mkdir -p /mnt/boot
-    mount -L BOOT /mnt/boot
+    mount --mkdir /dev/sda1 /mnt/boot
 
     echo "Activating SWAP partition..."
     swapon "${disk_partition}2"
+
+    echo "Mounting ROOT partition to /mnt..."
+    mount /dev/sda3 /mnt/boot
+
+    echo "Mounting HOME partition to /mnt/home..."
+    mount --mkdir /dev/sda4 /mnt/home
 }
 
 verify_partition_table() 
 {
     echo "Displaying created structure of ${largest_disk}:"
     parted "$largest_disk" print
+    echo "\n\n"
+
+    echo "Check for correct mount points:"
+    fdisk -l "$largest_disk"
+    echo "\n\n"
 }
 
 # Check if script is being run as root
