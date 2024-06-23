@@ -133,7 +133,7 @@ verify_partition_table()
 
     echo "Displaying results for 'genfstab -U /mnt'"
     genfstab -U /mnt
-    [ ! -d /mnt/etc ] && echo mkdir /mnt/etc
+    [ ! -d /mnt/etc ] && mkdir /mnt/etc
     echo -e "\n\n"
 
     read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
