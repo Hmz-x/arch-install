@@ -130,6 +130,40 @@ verify_partition_table()
     echo "Check for correct mount points:"
     lsblk "$largest_disk"
     echo -e "\n\n"
+
+    echo "Displaying results for 'genfstab -U /mnt'"
+    genfstab -U /mnt
+    echo -e "\n\n"
+
+    read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
+    [[ "$ans" == "y" || "$ans" == "Y" ]] && genfstab -U /mnt > /mnt/etc/fstab
+}
+
+add_boot_to_fstab() {
+
+    # Return if user selects answers besides y or Y
+    read -p "Add boot partition to /mnt/etc/fstab [y/n]: " ans
+    [[ "$ans" == "y" || "$ans" == "Y" ]] || return 0
+
+    # Ensure that the boot partition is mounted
+    if ! mount | grep -q "/mnt/boot"; then
+        echo "Boot partition is not mounted. Please mount it first."
+        return 1
+    fi
+
+    # Get the UUID of the boot partition
+    boot_uuid=$(blkid -s UUID -o value "${disk_partition}1")
+    
+    # Ensure the UUID was found
+    if [ -z "$boot_uuid" ]; then
+        echo "Could not find UUID for boot partition."
+        return 1
+    fi
+
+    # Add the boot partition entry to /mnt/etc/fstab
+    echo "UUID=$boot_uuid  /boot  vfat  defaults  0  2" >> /mnt/etc/fstab
+    echo "Boot partition added to /mnt/etc/fstab:"
+    tail -n 1 /mnt/etc/fstab
 }
 
 # Check if script is being run as root
@@ -155,3 +189,6 @@ mount_partitions
 
 # Verify partition table
 verify_partition_table
+
+# Add boot partition to fstab (If user chooses so)
+add_boot_to_fstab
