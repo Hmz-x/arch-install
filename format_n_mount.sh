@@ -54,7 +54,9 @@ create_partition_table()
 
   # Create HOME partition
   echo "Creating HOME partition..."
-  echo -e "n\n\n\n\n\nw\n" | fdisk "$largest_disk"
+  echo -e "n\n\n\n\n\ny\nw\n" | fdisk "$largest_disk"
+
+  partprobe "$largest_disk"
 }
 
 change_partition_types()
@@ -92,6 +94,8 @@ change_partition_types()
 
   # Change HOME partition type
   echo -e "t\n4\n${partition_type_num}w\n" | fdisk "$largest_disk"
+
+  partprobe "$largest_disk"
 }
 
 verify_partition_table()
