@@ -133,6 +133,7 @@ verify_partition_table()
 
     echo "Displaying results for 'genfstab -U /mnt'"
     genfstab -U /mnt
+    [ ! -d /mnt/etc ] && echo mkdir /mnt/etc
     echo -e "\n\n"
 
     read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
@@ -160,10 +161,17 @@ add_boot_to_fstab() {
         return 1
     fi
 
+    # Check if the UUID is already in fstab
+    if grep -q "$boot_uuid" /mnt/etc/fstab; then
+        echo "Entry for the boot partition already exists in /mnt/etc/fstab."
+        return 0
+    fi
+
     # Add the boot partition entry to /mnt/etc/fstab
-    echo "UUID=$boot_uuid  /boot  vfat  defaults  0  2" >> /mnt/etc/fstab
+    echo "# ${disk_partition}1" >> /mnt/etc/fstab
+    echo "UUID=$boot_uuid  /boot  vfat  rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro  0 2" >> /mnt/etc/fstab
     echo "Boot partition added to /mnt/etc/fstab:"
-    tail -n 1 /mnt/etc/fstab
+    tail -n 2 /mnt/etc/fstab
 }
 
 # Check if script is being run as root
@@ -175,7 +183,7 @@ determine_largest_disk
 # Determine boot system
 determine_boot
 
-# Create new GPT partition table and partitions
+# Create new partition table and partitions
 create_partition_table
 
 # Change partition types
