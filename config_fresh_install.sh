@@ -22,7 +22,7 @@ root_check()
     fi
 }
 
-set_ethernet()
+establish_netcon()
 {
 	rfkill unblock 0
 	if ping -w 2 www.archlinux.org &> /dev/null; then
@@ -52,7 +52,8 @@ set_groups()
 set_home()
 {
 	install -d --owner="$user" --group="$user" --mode=755 "/home/${user}" \
-		"/home/${user}/Documents" "/home/${user}/Documents/pics" "/home/${user}/Videos" \
+		"/home/${user}/Documents" "/home/${user}/Documents/pics" \
+    "/home/${user}/Documents/pics/wallpaper" "/home/${user}/Videos" \
 		"/home/${user}/Music" "/home/${user}/Downloads" "/home/${user}/.local/" \
 		"/home/${user}/.local/builds"
 }

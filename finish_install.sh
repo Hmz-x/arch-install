@@ -3,17 +3,19 @@
 # Non-graphical packages
 NG_PACKAGES_ARR=("rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "npm" \
   "nodejs" "cargo" "ripgrep" "tailscale" "fastfetch" "go" "fakeroot" "debugedit" "cmake" \
-  "cxxopts" "timeshift")
+  "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion" \
+  "starship" "mosh")
 
 # Graphical packages (via pacman)
-G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \ 
+G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
   "wlsunset" "polkit-kde-agent" "ly" "firefox" "dolphin" "qt6ct" "rofi" "imagemagick" "bluez" \
-  "bluez-utils" "pavucontrol" "rofimoji" "alacritty" "brightnessctl" "pamixer" "swaylock" \
+  "bluez-utils" "pavucontrol" "rofimoji" "alacritty" "brightnessctl" "pamixer" "xorg-xwayland" \
   "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers" \
-  "deluge-gtk")
+  "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts" \
+  "noto-fonts-emoji" )
 
 # Graphical packages (via yay)
-YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin")
+YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git")
 
 confirm_in()
 {
@@ -66,6 +68,12 @@ install_lunarvim()
 
 configure_env()
 {
+  echo "Running ssh-keygen..."
+  ssh-keygen 
+
+  # download 1 image to ~/Documents/pics/wallpaper just so qtile works properly
+  curl https://cutemafia.org/img/metrozu/zu-6926-17.jpeg -o ~/Documents/pics/wallpaper/zu-6926-17.jpeg
+
 	git config --global credential.helper store
   usermod -aG "$user" docker
   sudo ln -s ~/.local/bin/lvim /usr/local/bin/lvim
