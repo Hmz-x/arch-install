@@ -68,6 +68,7 @@ configure_env()
 {
 	git config --global credential.helper store
   usermod -aG "$user" docker
+  sudo ln -s ~/.local/bin/lvim /usr/local/bin/lvim
 }
 
 set_services()
