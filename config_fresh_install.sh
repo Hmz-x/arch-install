@@ -3,6 +3,17 @@
 IFACE="eth0"
 DOTFILES_REPO='https://github.com/Hmz-x/dotfiles'
 
+confirm_in()
+{
+	input="$1"
+	read -p "${input} - confirm input [Y/n]: " user_ans
+
+	if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
+		echo "Input is not confirmed. Returning." 2>&1
+		return 1
+	fi
+}
+
 root_check() 
 {
     if [[ $UID -ne 0 ]]; then
