@@ -1,9 +1,29 @@
 #!/bin/bash
 
 # Program config data
-ZONE="America/Indiana/Indianapolis"
+#ZONE="America/Indiana/Indianapolis"
+ZONE="Turkey"
 LOCALE_1="en_US ISO-8859-1"
 LOCALE_2="en_US.UTF-8 UTF-8"
+
+confirm_in()
+{
+	input="$1"
+	read -p "${input} - confirm input [Y/n]: " user_ans
+
+	if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
+		echo "Input is not confirmed. Returning." 2>&1
+		return 1
+	fi
+}
+
+root_check() 
+{
+    if [[ $UID -ne 0 ]]; then
+        echo "Run as root. Exiting." >&2
+        exit 1
+    fi
+}
 
 determine_boot()
 {
@@ -28,17 +48,6 @@ set_time_n_locale()
 	echo "export LC_COLLATE=\"C\"" >> /etc/locale.conf
 }
 
-set_bootloader()
-{
-  pacman -Sy
-	pacman -S vim grub os-prober efibootmgr
-	if [ "$boot_sys" = "BIOS" ]; then
-		grub-install --recheck /dev/sda
-	else
-		grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
-	fi
-	grub-mkconfig -o /boot/grub/grub.cfg
-}
 
 set_users()
 {
@@ -46,7 +55,7 @@ set_users()
 	passwd
 
 	read -p "Enter new username: " username
-	#confirm_in "$username"
+	confirm_in "$username" || return 1
 	useradd -m "$username"	
 
 	echo "Enter new password for $username."
@@ -57,7 +66,7 @@ network_config()
 {
 
 	read -p "Enter new hostname: " hostname
-	confirm_in "$hostname"
+	confirm_in "$hostname" || return 1
 	echo "$hostname" > /etc/hostname
 
 	echo "127.0.0.1        localhost" > /etc/hosts
@@ -70,29 +79,16 @@ network_config()
 	pacman -S dhclient
 }
 
-get_username()
+set_bootloader()
 {
-	read -p "Enter username: " user
-	confirm_in "$user"
-
-	# Add user if user does not exist on system
-	id "$user" &> /dev/null || { useradd -m "$user" && passwd "$user"; }
-}
-
-set_groups()
-{
-	groupadd seatd
-
-	usermod root -a -G audio,input,seatd
-	usermod "$user" -a -G network,wheel,audio,disk,input,storage,video,seatd
-}
-
-set_home()
-{
-	install -d --owner="$user" --group="$user" --mode=755 \
-		"/home/${user}/Documents" "/home/${user}/Documents/pics" "/home/${user}/Videos" \
-		"/home/${user}/Music" "/home/${user}/Downloads" "/home/${user}/.local/" \
-		"/home/${user}/.local/builds"
+  pacman -Sy
+	pacman -S vim grub os-prober efibootmgr
+	if [ "$boot_sys" = "BIOS" ]; then
+		grub-install --recheck /dev/sda
+	else
+		grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+	fi
+	grub-mkconfig -o /boot/grub/grub.cfg
 }
 
 # Check if script is being run as root
@@ -101,7 +97,14 @@ root_check
 # Determine boot system
 determine_boot
 
+# Set up time and locale
 set_time_n_locale
+
+# Set up network
 network_config
+
+# Set up users
 set_users
+
+# Set bootloader: install grub and run grub-install
 set_bootloader

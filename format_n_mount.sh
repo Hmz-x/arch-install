@@ -63,6 +63,7 @@ create_partition_table()
 change_partition_types()
 {
     if [ "$boot_sys" = "BIOS" ]; then
+        echo "Setting first partition as bootable..."
         parted -s "$largest_disk" set 1 boot on
     fi
 
@@ -132,12 +133,13 @@ verify_partition_table()
     echo -e "\n\n"
 
     echo "Displaying results for 'genfstab -U /mnt'"
+    echo "If boot partition does not show simply (re)mount /dev/${disk_partition}1 to /mnt/boot"
     genfstab -U /mnt
     [ ! -d /mnt/etc ] && mkdir /mnt/etc
     echo -e "\n\n"
 
-    read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
-    [[ "$ans" == "y" || "$ans" == "Y" ]] && genfstab -U /mnt > /mnt/etc/fstab
+    #read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
+    #[[ "$ans" == "y" || "$ans" == "Y" ]] && genfstab -U /mnt > /mnt/etc/fstab
 }
 
 add_boot_to_fstab() {
@@ -199,4 +201,4 @@ mount_partitions
 verify_partition_table
 
 # Add boot partition to fstab (If user chooses so)
-add_boot_to_fstab
+#add_boot_to_fstab
