@@ -1,5 +1,16 @@
 #!/bin/bash
 
+confirm_in()
+{
+	input="$1"
+	read -p "${input} - confirm input [Y/n]: " user_ans
+
+	if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
+		echo "Input is not confirmed. Returning." 2>&1
+		return 1
+	fi
+}
+
 root_check() 
 {
     if [[ $UID -ne 0 ]]; then
@@ -108,7 +119,8 @@ create_fs()
 mount_partitions()
 {
     echo "Mounting BOOT partition to /mnt/boot..."
-    mount --mkdir /dev/sda1 /mnt/boot
+    [ ! -d /mnt/boot ] && mkdir /mnt/boot
+    mount /dev/sda1 /mnt/boot
 
     echo "Activating SWAP partition..."
     swapon "${disk_partition}2"
@@ -133,13 +145,19 @@ verify_partition_table()
     echo -e "\n\n"
 
     echo "Displaying results for 'genfstab -U /mnt'"
-    echo "If boot partition does not show simply (re)mount /dev/${disk_partition}1 to /mnt/boot"
+    echo "If boot partition does not show simply (re)mount ${disk_partition}1 to /mnt/boot"
     genfstab -U /mnt
     [ ! -d /mnt/etc ] && mkdir /mnt/etc
     echo -e "\n\n"
 
     #read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
     #[[ "$ans" == "y" || "$ans" == "Y" ]] && genfstab -U /mnt > /mnt/etc/fstab
+
+    read -p "Mount ${disk_partition}1 to /mnt/boot" ans
+    confirm_in "$ans" || return
+
+    [ ! -d /mnt/boot ] && mkdir /mnt/boot
+    mount "${disk_partition}1" /mnt/boot
 }
 
 add_boot_to_fstab() {

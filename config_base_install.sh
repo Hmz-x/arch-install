@@ -56,7 +56,7 @@ set_users()
 
 	read -p "Enter new username: " username
 	confirm_in "$username" || return 1
-	useradd -m "$username"	
+	useradd "$username"	
 
 	echo "Enter new password for $username."
 	passwd "$username"
@@ -82,7 +82,7 @@ network_config()
 set_bootloader()
 {
   pacman -Sy
-	pacman -S vim grub os-prober efibootmgr
+	pacman -S sudo vim grub os-prober efibootmgr
 	if [ "$boot_sys" = "BIOS" ]; then
 		grub-install --recheck /dev/sda
 	else

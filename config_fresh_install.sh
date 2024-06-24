@@ -25,12 +25,12 @@ root_check()
 set_ethernet()
 {
 	rfkill unblock 0
-	if ip a | grep -q "inet .*${IFACE}" && ip link show "$IFACE" | grep -q "state UP"; then
-		echo "Ethernet connected."
+	if ping -w 2 www.archlinux.org &> /dev/null; then
+		echo "Connected to network."
 	else
-		echo "Ethernet not connected."
+		echo "Not connected to network."
 		echo "Running dhclient..."
-		dhclient "$IFACE"	
+		dhclient
 	fi	
 }
 
@@ -40,7 +40,7 @@ get_username()
 	confirm_in "$user" || exit 1
 
 	# Add user if user does not exist on system
-	id "$user" &> /dev/null || { useradd -m "$user" && passwd "$user"; }
+	id "$user" &> /dev/null || { useradd "$user" && passwd "$user"; }
 }
 
 set_groups()
@@ -51,7 +51,7 @@ set_groups()
 
 set_home()
 {
-	install -d --owner="$user" --group="$user" --mode=755 \
+	install -d --owner="$user" --group="$user" --mode=755 "/home/${user}" \
 		"/home/${user}/Documents" "/home/${user}/Documents/pics" "/home/${user}/Videos" \
 		"/home/${user}/Music" "/home/${user}/Downloads" "/home/${user}/.local/" \
 		"/home/${user}/.local/builds"
@@ -65,7 +65,7 @@ set_dotlocal()
 
 	# Copy arch-install to user /home/${user}/.local/bin/
   if [ -d /root/arch-install ]; then
-    cp -vr /root/arch-install "/home/${user}/.local/bin"
+    cp -vr /root/arch-install "/home/${user}/.local/bin/"
 
     # Change owner to be $user
     chown -R "${user}:${user}" "/home/${user}/.local/bin/arch-install"
@@ -81,8 +81,8 @@ set_dotlocal()
 # Check if script is being run as root
 root_check
 
-# Establish ethernet connection
-#set_ethernet
+# Establish network connection
+establish_netcon
 
 # Get username to work with
 get_username
