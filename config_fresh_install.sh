@@ -45,8 +45,8 @@ get_username()
 
 set_groups()
 {
-	usermod root -a -G audio,input
-	usermod "$user" -a -G network,wheel,audio,disk,input,storage,video
+	usermod root -aG audio,input
+	usermod "$user" -aG network,wheel,audio,disk,input,storage,video
 }
 
 set_home()

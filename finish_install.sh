@@ -4,7 +4,8 @@
 NG_PACKAGES_ARR=("rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "npm" \
   "nodejs" "cargo" "ripgrep" "tailscale" "fastfetch" "go" "fakeroot" "debugedit" "cmake" \
   "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion" \
-  "starship" "mosh")
+  "starship" "mosh" "pass" "pipewire-pulse" "python-psutil" "man-pages" "man-db" \
+  "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -44,8 +45,8 @@ install_pkgs()
   sudo pacman -S "${NG_PACKAGES_ARR[@]}"
 
   # Upon user confirmation, install graphical pkgs
-  read -p "Continue to installation of graphical packages: ${G_PACKAGES_ARR[@]}" ans
-	confirm_in "$ans" || return
+  #read -p "Continue to installation of graphical packages: ${G_PACKAGES_ARR[@]}" ans
+  #confirm_in "$ans" || return
   sudo pacman -S "${G_PACKAGES_ARR[@]}"
 }
 
@@ -75,13 +76,15 @@ configure_env()
   curl https://cutemafia.org/img/metrozu/zu-6926-17.jpeg -o ~/Documents/pics/wallpaper/zu-6926-17.jpeg
 
 	git config --global credential.helper store
-  usermod -aG "$user" docker
+  usermod "$user" -aG docker
   sudo ln -s ~/.local/bin/lvim /usr/local/bin/lvim
 }
 
 set_services()
 {
   systemctl --user enable --now pipewire
+  systemctl --user enable --now pipewire-pulse
+  sudo systemctl enable --now NetworkManager
   sudo systemctl enable --now docker
   sudo systemctl enable --now ly
   sudo systemctl enable --now bluetooth
