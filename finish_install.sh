@@ -47,8 +47,8 @@ install_pkgs()
   sudo pacman -S "${NG_PACKAGES_ARR[@]}"
 
   # Upon user confirmation, install graphical pkgs
-  #read -p "Continue to installation of graphical packages: ${G_PACKAGES_ARR[@]}" ans
-  #confirm_in "$ans" || return
+  confirm_in "Continue to installation of graphical packages via pacman: \
+${G_PACKAGES_ARR[*]}" || return
   sudo pacman -S "${G_PACKAGES_ARR[@]}"
 }
 
@@ -59,13 +59,15 @@ install_yay()
 
   # Install yay packages
   yay -Syu
-  read -p "Continue to installation of graphical packages: ${YAY_G_PACKAGES_ARR[@]}" ans
-	confirm_in "$ans" || return
+  confirm_in "Continue to installation of graphical packages via yay: \
+${YAY_G_PACKAGES_ARR[*]}" || return
   yay -S "${YAY_G_PACKAGES_ARR[@]}"
 }
 
 install_lunarvim()
 {
+
+  confirm_in "Continue to installation of lvim" || return
   LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh)
 }
 
