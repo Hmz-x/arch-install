@@ -6,7 +6,7 @@ NG_PACKAGES_ARR=("rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "
   "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion" \
   "starship" "mosh" "pass" "pipewire-pulse" "python-psutil" "man-pages" "man-db" \
   "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose" \
-  "openntpd" "cronie" "ufw")
+  "openntpd" "cronie" "ufw" "wget")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -14,7 +14,7 @@ G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "
   "bluez-utils" "pavucontrol" "rofimoji" "alacritty" "brightnessctl" "pamixer" "xorg-xwayland" \
   "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers" \
   "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts" \
-  "noto-fonts-emoji" "python-dbus-next")
+  "noto-fonts-emoji" "python-dbus-next" "notification-daemon")
 
 # Graphical packages (via yay)
 YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git" \
