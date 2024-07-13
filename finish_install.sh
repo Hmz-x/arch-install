@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Non-graphical packages
-NG_PACKAGES_ARR=("rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "npm" \
+NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "npm" \
   "nodejs" "cargo" "ripgrep" "tailscale" "fastfetch" "go" "fakeroot" "debugedit" "cmake" \
   "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion" \
   "starship" "mosh" "pass" "pipewire-pulse" "python-psutil" "man-pages" "man-db" \
   "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose" \
-  "openntpd" "cronie" "ufw" "wget")
+  "openntpd" "cronie" "ufw" "wget" "networkmanager")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -40,16 +40,27 @@ get_username()
 	id "$user" &> /dev/null || { useradd "$user" && passwd "$user"; }
 }
 
+install_loop()
+{
+    pkgs_arr=("$@")
+    for pkg in "${pkgs_arr[@]}"; do
+        sudo pacman --needed --noconfirm -S "$pkg"
+    done
+}
+
 install_pkgs()
 {
   # Update & upgrade system, then install Non-graphical pkgs
   sudo pacman -Syu
-  sudo pacman -S "${NG_PACKAGES_ARR[@]}"
+  echo "Installing: ${NG_PACKAGES_ARR[@]}.."
+  #sudo pacman --needed --noconfirm -S "${NG_PACKAGES_ARR[@]}"
+  install_loop "${NG_PACKAGES_ARR[@]}"
 
   # Upon user confirmation, install graphical pkgs
   confirm_in "Continue to installation of graphical packages via pacman: \
 ${G_PACKAGES_ARR[*]}" || return
-  sudo pacman -S "${G_PACKAGES_ARR[@]}"
+  #sudo pacman --needed --noconfirm -S "${G_PACKAGES_ARR[@]}"
+  install_loop "${G_PACKAGES_ARR[@]}"
 }
 
 install_yay()
