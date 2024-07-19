@@ -153,11 +153,18 @@ verify_partition_table()
     #read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
     #[[ "$ans" == "y" || "$ans" == "Y" ]] && genfstab -U /mnt > /mnt/etc/fstab
 
-    read -p "Mount ${disk_partition}1 to /mnt/boot" ans
+    read -p "Mount ${disk_partition}1 to /mnt/boot [y/n]:" ans
     confirm_in "$ans" || return
 
     [ ! -d /mnt/boot ] && mkdir /mnt/boot
     mount "${disk_partition}1" /mnt/boot
+
+    echo -e "\n\nNew genfstab output:"
+    genfstab -U /mnt
+
+    read -p "Write to /mnt/etc/fstab [y/n]: " ans
+    confirm_in "$ans" || return
+    genfstab -U /mnt > /mnt/etc/fstab
 }
 
 add_boot_to_fstab() {
