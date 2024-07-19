@@ -3,7 +3,8 @@
 This set of scripts is used for automating each part of the arch installation
 process. This script can be very easily modified to install distros such
 as Artix & etc. as well. Run the scripts in the right order to successfuly
-install arch.
+install arch. Always switch system boot settings to UEFI if it's BIOS by
+default (even in a virtual environment) before running this script.
 
 ## Order of the scripts
 
@@ -30,18 +31,20 @@ git clone https://github.com/Hmz-x/arch-install
 # genfstab -U /mnt > /mnt/etc/fstab
 
 ./arch-install/install_pkgs_n_chroot.sh
-exit # exit out of chroot
-umount -R /mnt
-reboot
-
+# You are now inside chroot
 pacman -Sy
 pacman -S git
 cd /root
 git clone https://github.com/Hmz-x/arch-install
 ./arch-install/config_base_install.sh
+exit # exit out of chroot
+umount -U /mnt # unmount all partitions
+reboot
 
+# Log in as root
 ./arch-install/config_fresh_install.sh
 
-# Log back in as user
+# Log back in as regular user
+sudo dhclient # Run if a network connection is not present
 ~/.local/bin/arch-install/config_fresh_install.sh
 ```
