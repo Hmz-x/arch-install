@@ -1,12 +1,11 @@
 #!/bin/bash
 
-IFACE="eth0"
 DOTFILES_REPO='https://github.com/Hmz-x/dotfiles'
 
 confirm_in()
 {
 	input="$1"
-	read -p "${input} - confirm input [Y/n]: " user_ans
+	read -rp "${input} - confirm input [Y/n]: " user_ans
 
 	if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
 		echo "Input is not confirmed. Returning." 2>&1
@@ -36,7 +35,7 @@ establish_netcon()
 
 get_username()
 {
-	read -p "Enter username: " user
+	read -rp "Enter username: " user
 	confirm_in "$user" || exit 1
 
 	# Add user if user does not exist on system
@@ -73,7 +72,7 @@ set_dotlocal()
   fi
 
 	# Reboot for changes to sudoers file to take place
-	read -p "Press enter key to reboot in order for sudo permissions to apply to user..."
+	read -rp "Press enter key to reboot in order for sudo permissions to apply to user..."
 	echo "Log back in as regular user after reboot..."
 	sleep 1
 	reboot

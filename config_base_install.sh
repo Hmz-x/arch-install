@@ -9,7 +9,7 @@ LOCALE_2="en_US.UTF-8 UTF-8"
 confirm_in()
 {
 	input="$1"
-	read -p "${input} - confirm input [Y/n]: " user_ans
+	read -rp "${input} - confirm input [Y/n]: " user_ans
 
 	if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
 		echo "Input is not confirmed. Returning." 2>&1
@@ -54,7 +54,7 @@ set_users()
 	echo "Enter new password for root user."
 	passwd
 
-	read -p "Enter new username: " username
+	read -rp "Enter new username: " username
 	confirm_in "$username" || return 1
 	useradd "$username"	
 
@@ -65,7 +65,7 @@ set_users()
 network_config()
 {
 
-	read -p "Enter new hostname: " hostname
+	read -rp "Enter new hostname: " hostname
 	confirm_in "$hostname" || return 1
 	echo "$hostname" > /etc/hostname
 
@@ -73,8 +73,8 @@ network_config()
 	echo "::1			   localhost" >> /etc/hosts
 	echo "127.0.0.1        ${hostname}.localhost ${hostname}" >> /etc/hosts
 	
-	# extra openrc network configuration step
-	[ "$init_sys" = "openrc" ] && echo "hostname='${hostname}'" > /etc/conf.d/hostname
+	# extra openrc network configuration step if init_sys was implemented:
+	#[ "$init_sys" = "openrc" ] && echo "hostname='${hostname}'" > /etc/conf.d/hostname
 
 	pacman -S dhclient
 }

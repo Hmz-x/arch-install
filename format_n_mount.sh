@@ -3,7 +3,7 @@
 confirm_in()
 {
 	input="$1"
-	read -p "${input} - confirm input [Y/n]: " user_ans
+	read -rp "${input} - confirm input [Y/n]: " user_ans
 
 	if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
 		echo "Input is not confirmed. Returning." 2>&1
@@ -28,7 +28,7 @@ determine_largest_disk()
 
     echo "Warning: This script will erase all data on ${largest_disk}. Use with caution."
 
-    read -p "Continue [y/n]: " ans
+    read -rp "Continue [y/n]: " ans
     [[ "$ans" == "y" || "$ans" == "Y" ]] || { echo "Exiting and avoiding overwrite."; exit 1; }
 }
 
@@ -150,10 +150,10 @@ verify_partition_table()
     [ ! -d /mnt/etc ] && mkdir /mnt/etc
     echo -e "\n\n"
 
-    #read -p "Write current partition table to /mnt/etc/fstab [y/n]: "
+    #read -rp "Write current partition table to /mnt/etc/fstab [y/n]: "
     #[[ "$ans" == "y" || "$ans" == "Y" ]] && genfstab -U /mnt > /mnt/etc/fstab
 
-    read -p "Mount ${disk_partition}1 to /mnt/boot [y/n]:" ans
+    read -rp "Mount ${disk_partition}1 to /mnt/boot [y/n]:" ans
     confirm_in "$ans" || return
 
     [ ! -d /mnt/boot ] && mkdir /mnt/boot
@@ -162,7 +162,7 @@ verify_partition_table()
     echo -e "\n\nNew genfstab output:"
     genfstab -U /mnt
 
-    read -p "Write to /mnt/etc/fstab [y/n]: " ans
+    read -rp "Write to /mnt/etc/fstab [y/n]: " ans
     confirm_in "$ans" || return
     genfstab -U /mnt > /mnt/etc/fstab
 }
@@ -170,7 +170,7 @@ verify_partition_table()
 add_boot_to_fstab() {
 
     # Return if user selects answers besides y or Y
-    read -p "Add boot partition to /mnt/etc/fstab [y/n]: " ans
+    read -rp "Add boot partition to /mnt/etc/fstab [y/n]: " ans
     [[ "$ans" == "y" || "$ans" == "Y" ]] || return 0
 
     # Ensure that the boot partition is mounted
