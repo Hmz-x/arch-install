@@ -21,10 +21,10 @@ root_check()
 
 determine_largest_disk() 
 {
-    largest_disk=$(lsblk -dno NAME,SIZE | grep -Eo '^[^ ]+' | while read disk; do
-        size=$(lsblk -dno SIZE /dev/$disk)
+    largest_disk=$(lsblk -dno NAME,SIZE | 
+      while read -r disk size; do 
         echo "$size /dev/$disk"
-    done | sort -hr | head -n 1 | awk '{print $2}')
+      done | sort -hr | head -n 1 | awk '{print $2}')
 
     echo "Warning: This script will erase all data on ${largest_disk}. Use with caution."
 
@@ -120,16 +120,16 @@ mount_partitions()
 {
     echo "Mounting BOOT partition to /mnt/boot..."
     [ ! -d /mnt/boot ] && mkdir /mnt/boot
-    mount /dev/sda1 /mnt/boot
+    mount "${disk_partition}1" /mnt/boot
 
     echo "Activating SWAP partition..."
     swapon "${disk_partition}2"
 
     echo "Mounting ROOT partition to /mnt..."
-    mount /dev/sda3 /mnt/
+    mount "${disk_partition}3" /mnt/
 
     echo "Mounting HOME partition to /mnt/home..."
-    mount --mkdir /dev/sda4 /mnt/home
+    mount --mkdir "${disk_partition}4" /mnt/home
 
     echo -e "\n\n"
 }

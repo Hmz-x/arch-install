@@ -84,7 +84,12 @@ set_bootloader()
   pacman -Sy
 	pacman -S sudo vim grub os-prober efibootmgr
 	if [ "$boot_sys" = "BIOS" ]; then
-		grub-install --recheck /dev/sda
+    largest_disk=$(lsblk -dno NAME,SIZE | 
+      while read -r disk size; do 
+        echo "$size /dev/$disk"
+      done | sort -hr | head -n 1 | awk '{print $2}')
+
+    grub-install --recheck "$largest_disk"
 	else
 		grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
 	fi
