@@ -9,7 +9,7 @@ NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-
   "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion" \
   "starship" "mosh" "pass" "pipewire-pulse" "python-psutil" "man-pages" "man-db" \
   "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose" \
-  "openntpd" "cronie" "ufw" "wget" "networkmanager")
+  "openntpd" "cronie" "ufw" "wget" "networkmanager" "wireshark-qt" "wl-clipboard" "wtype" "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -101,6 +101,9 @@ configure_env()
 	git config --global credential.helper store
   usermod "$user" -aG docker
   sudo ln -s ~/.local/bin/lvim /usr/local/bin/lvim
+
+  # set proper perms for dumpcap
+  sudo chmod 755 /sbin/dumpcap
 }
 
 set_services()
