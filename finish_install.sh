@@ -9,7 +9,9 @@ NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-
   "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion" \
   "starship" "mosh" "pass" "pipewire-pulse" "python-psutil" "man-pages" "man-db" \
   "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose" \
-  "openntpd" "cronie" "ufw" "wget" "networkmanager" "wireshark-qt" "wl-clipboard" "wtype" "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard")
+  "openntpd" "cronie" "ufw" "wget" "networkmanager" "wireshark-qt" "wl-clipboard" "wtype" \
+  "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard" "rtkit" "shellcheck" \
+  "alsa-firmware" "alsa-tools" "alsa-utils")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -17,7 +19,7 @@ G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "
   "bluez-utils" "pavucontrol" "rofimoji" "alacritty" "brightnessctl" "pamixer" "xorg-xwayland" \
   "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers" \
   "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts" \
-  "noto-fonts-emoji" "python-dbus-next" "notification-daemon")
+  "noto-fonts-emoji" "python-dbus-next" "notification-daemon" "mpv" "sof-firmware")
 
 # Graphical packages (via yay)
 YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git" \
@@ -54,7 +56,7 @@ install_loop()
 install_pkgs()
 {
   # Update & upgrade system, then install Non-graphical pkgs
-  sudo pacman -Syu
+  sudo pacman --noconfirm -Syu
   echo "Installing: ${NG_PACKAGES_ARR[*]}.."
   install_loop "${NG_PACKAGES_ARR[@]}"
 
@@ -70,7 +72,7 @@ install_yay()
 	cd "/home/${user}/.local/builds" && git clone "$YAY_REPO" && cd yay && makepkg -si
 
   # Install yay packages
-  yay -Syu
+  yay --noconfirm -Syu
   confirm_in "Continue to installation of graphical packages via yay: \
 ${YAY_G_PACKAGES_ARR[*]}" || return
   yay --needed --noconfirm -S "${YAY_G_PACKAGES_ARR[@]}"
