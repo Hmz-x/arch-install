@@ -11,7 +11,8 @@ NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-
   "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose" \
   "openntpd" "cronie" "ufw" "wget" "networkmanager" "wireshark-qt" "wl-clipboard" "wtype" \
   "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard" "rtkit" "shellcheck" \
-  "alsa-firmware" "alsa-tools" "alsa-utils")
+  "alsa-firmware" "alsa-tools" "alsa-utils" "autoconf" "automake" "libdaq" "libdnet" \
+  "flex" "hwloc")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
