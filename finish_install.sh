@@ -12,7 +12,8 @@ NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-
   "openntpd" "cronie" "ufw" "wget" "networkmanager" "wireshark-qt" "wl-clipboard" "wtype" \
   "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard" "rtkit" "shellcheck" \
   "alsa-firmware" "alsa-tools" "alsa-utils" "autoconf" "automake" "libdaq" "libdnet" \
-  "flex" "hwloc")
+  "flex" "hwloc" "tor" "nmap" "proxychains-ng" "android-sdk-platform-tools" \
+  "android-udev")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -95,18 +96,28 @@ set_vim_plugins()
 
 configure_env()
 {
+  # ssh
   echo "Running ssh-keygen..."
   ssh-keygen 
 
   # download the default wallpaper image to ~/Documents/pics/wallpaper just so qtile works properly
   curl "$DEF_IMG_SRC" -Lo ~/Documents/pics/wallpaper/default.jpeg
 
+  # git
 	git config --global credential.helper store
+
+  # docker
   usermod "$user" -aG docker
+
+  # lvim
   sudo ln -s ~/.local/bin/lvim /usr/local/bin/lvim
 
   # set proper perms for dumpcap
   sudo chmod 755 /sbin/dumpcap
+
+  # adb + fastboot
+  sudo ln -sf /opt/android-sdk-platform-tools/adb /usr/local/bin/adb
+  sudo ln -sf /opt/android-sdk-platform-tools/fastboot /usr/local/bin/fastboot
 }
 
 set_services()
