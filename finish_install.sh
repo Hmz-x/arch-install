@@ -118,6 +118,15 @@ configure_env()
   # adb + fastboot
   sudo ln -sf /opt/android-sdk-platform-tools/adb /usr/local/bin/adb
   sudo ln -sf /opt/android-sdk-platform-tools/fastboot /usr/local/bin/fastboot
+
+  # set up proxychains config
+  git clone https://github.com/Hmz-x/botnet-control ~/.local/src/botnet-control
+  sudo cp ~/.local/src/botnet-control/proxychains.conf /etc/proxychains.conf
+
+  # set up saphyra
+  git clone https://github.com/niedong/saphyra ~/.local/bin/saphyra
+  chmod 755 ~/.local/bin/saphyra/saphyra.py
+  sudo ln -sf ~/.local/bin/saphyra/saphyra.py /usr/local/bin/saphyra.py
 }
 
 set_services()
