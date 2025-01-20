@@ -13,7 +13,7 @@ NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-
   "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard" "rtkit" "shellcheck" \
   "alsa-firmware" "alsa-tools" "alsa-utils" "autoconf" "automake" "libdaq" "libdnet" \
   "flex" "hwloc" "tor" "nmap" "proxychains-ng" "android-sdk-platform-tools" \
-  "android-udev")
+  "android-udev" "bc")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -21,7 +21,8 @@ G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "
   "bluez-utils" "pavucontrol" "rofimoji" "alacritty" "brightnessctl" "pamixer" "xorg-xwayland" \
   "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers" \
   "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts" \
-  "noto-fonts-emoji" "python-dbus-next" "notification-daemon" "mpv" "sof-firmware")
+  "noto-fonts-emoji" "python-dbus-next" "notification-daemon" "mpv" \
+  "sof-firmware" "vulkan-radeon" "bluez" "slack")
 
 # Graphical packages (via yay)
 YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git" \
