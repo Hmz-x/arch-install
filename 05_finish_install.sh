@@ -13,7 +13,7 @@ NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-
   "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard" "rtkit" "shellcheck" \
   "alsa-firmware" "alsa-tools" "alsa-utils" "autoconf" "automake" "libdaq" "libdnet" \
   "flex" "hwloc" "tor" "nmap" "proxychains-ng" "android-sdk-platform-tools" \
-  "android-udev" "bc")
+  "android-udev" "bc" "yq" "entr")
 
 # Graphical packages (via pacman)
 G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
@@ -95,6 +95,11 @@ set_vim_plugins()
 	vim +PluginInstall +qall
 }
 
+set_tmux_plugin_manager()
+{
+  git clone https://github.com/tmux-plugins/tpm "/home/${user}/tmux/plugins/tpm"
+}
+
 configure_env()
 {
   # ssh
@@ -151,6 +156,8 @@ install_yay
 install_lunarvim
 
 set_vim_plugins
+
+set_tmux_plugin_manager
 
 configure_env
 
