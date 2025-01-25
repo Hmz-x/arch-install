@@ -22,11 +22,11 @@ G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "
   "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers" \
   "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts" \
   "noto-fonts-emoji" "python-dbus-next" "notification-daemon" "mpv" \
-  "sof-firmware" "vulkan-radeon" "bluez" "slack")
+  "sof-firmware" "vulkan-radeon" "bluez" "blueman")
 
 # Graphical packages (via yay)
 YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git" \
-  "notify-send-py")
+  "notify-send-py" "slack-desktop-wayland") 
 
 confirm_in()
 {
