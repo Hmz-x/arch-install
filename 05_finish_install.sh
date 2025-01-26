@@ -22,7 +22,7 @@ G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "
   "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers" \
   "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts" \
   "noto-fonts-emoji" "python-dbus-next" "notification-daemon" "mpv" \
-  "sof-firmware" "vulkan-radeon" "bluez" "blueman")
+  "sof-firmware" "vulkan-radeon" "bluez" "blueman" "code")
 
 # Graphical packages (via yay)
 YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git" \
@@ -100,6 +100,43 @@ set_tmux_plugin_manager()
   git clone https://github.com/tmux-plugins/tpm "/home/${user}/tmux/plugins/tpm"
 }
 
+install_vscode_extensions()
+{
+  echo "Installing VS Code extensions..."
+
+  # JS
+  code --install-extension dbaeumer.vscode-eslint
+  code --install-extension esbenp.prettier-vscode
+  code --install-extension xabikos.javascriptsnippets
+  code --install-extension christian-kohler.path-intellisense
+  code --install-extension coenraads.bracket-pair-colorizer-2
+  code --install-extension christian-kohler.npm-intellisense
+  code --install-extension streetsidesoftware.code-spell-checker
+  code --install-extension msjsdiag.debugger-for-chrome
+
+  # PY
+  code --install-extension ms-python.python
+  code --install-extension njpwerner.autodocstring
+  code --install-extension ms-toolsai.jupyter
+  code --install-extension ms-python.black-formatter
+  code --install-extension kevinrose.vsc-python-indent
+  code --install-extension littlefoxteam.vscode-python-test-adapter
+  code --install-extension timonwong.shellcheck
+
+  # Bash
+  code --install-extension mads-hartmann.bash-ide-vscode    # Bash language server
+  code --install-extension timonwong.shellcheck            # Linter for shell scripts
+  code --install-extension foxundermoon.shell-format       # Shell script formatter
+
+  # Misc
+  code --install-extension eamodio.gitlens
+  code --install-extension wayou.vscode-todo-highlight
+  code --install-extension pkief.material-icon-theme
+  code --install-extension ritwickdey.liveserver
+  code --install-extension humao.rest-client
+  code --install-extension vscodevim.vim
+}
+
 configure_env()
 {
   # ssh
@@ -158,6 +195,8 @@ install_lunarvim
 set_vim_plugins
 
 set_tmux_plugin_manager
+
+install_vscode_extensions
 
 configure_env
 
