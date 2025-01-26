@@ -51,6 +51,10 @@ create_partition_table()
         partition_table="msdos"
     fi
 
+    echo "Wiping $largest_disk..."
+    wipefs -a "$largest_disk"
+    dd if=/dev/zero of="$largest_disk" bs=1M count=10 status=progress
+
     echo "Creating new $partition_table partition table on $largest_disk"
     parted -s "$largest_disk" mklabel "$partition_table"
 
@@ -66,7 +70,7 @@ create_partition_table()
     parted -s "$largest_disk" mkpart primary ext4 4617MiB 49664MiB
 
     echo "Creating HOME partition..."
-    parted -s "$largest_disk" mkpart primary ext4 49664MiB 100%
+    parted -s "$largest_disk" mkpart primary ext4 49664MiB 50%
 
     echo -e "\n\n"
 }
@@ -150,9 +154,6 @@ verify_partition_table()
     [ ! -d /mnt/etc ] && mkdir /mnt/etc
     echo -e "\n\n"
 
-    #read -rp "Write current partition table to /mnt/etc/fstab [y/n]: "
-    #[[ "$ans" == "y" || "$ans" == "Y" ]] && genfstab -U /mnt > /mnt/etc/fstab
-
     read -rp "Mount ${disk_partition}1 to /mnt/boot [y/n]:" ans
     confirm_in "$ans" || return
 
@@ -224,6 +225,3 @@ mount_partitions
 
 # Verify partition table
 verify_partition_table
-
-# Add boot partition to fstab (If user chooses so)
-#add_boot_to_fstab
