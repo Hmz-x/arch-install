@@ -117,10 +117,10 @@ create_fs()
     fi
 
     echo "Formatting ROOT partition as ext4..."
-    mkfs.ext4 "${disk_partition}3"
+    mkfs.ext4 "${disk_partition}2"
 
     echo "Formatting SWAP partition..."
-    mkswap "${disk_partition}2"
+    mkswap "${disk_partition}3"
 
     echo "Formatting HOME partition as ext4..."
     mkfs.ext4 "${disk_partition}4"
@@ -131,14 +131,14 @@ create_fs()
 mount_partitions()
 {
     echo "Mounting ROOT partition to /mnt..."
-    mount "${disk_partition}3" /mnt/
+    mount "${disk_partition}2" /mnt/
 
     echo "Mounting BOOT partition to /mnt/boot..."
     [ ! -d /mnt/boot ] && mkdir /mnt/boot
     mount "${disk_partition}1" /mnt/boot
 
     echo "Activating SWAP partition..."
-    swapon "${disk_partition}2"
+    swapon "${disk_partition}3"
 
     echo "Mounting HOME partition to /mnt/home..."
     mount --mkdir "${disk_partition}4" /mnt/home
