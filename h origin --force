@@ -1,0 +1,39 @@
+[33ma5b7e49[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m code extensions added
+[33mb4cb2da[m pkgs updt
+[33m43f07b2[m tpm updt
+[33ma65f4c7[m naming changes
+[33m94c244d[m added new pkgs
+[33m5eabfe8[m added proxychains + saphyra
+[33mdf4e8c9[m updated w/ new pkgs to install and soft link adb + fastboot
+[33mb6850ee[m updated pkg list
+[33md1c1776[m finish_install pkg installation update
+[33mf649c62[m Merge remote-tracking branch 'refs/remotes/origin/master'
+[33mbefe4ae[m changes to finish install
+[33m15408e0[m updated readme
+[33m1a5b7c1[m fixed /dev/sda hardcoded stuff and instead used
+[33m63104bc[m small changes. changed read -p to read -rp. changed default image source for qtile wallpaper
+[33m6e27dc6[m fixed & updated readme
+[33m75be493[m fstab entry is now written to /mnt/etc/fstab & added readme
+[33m5e7f33c[m update to finish_install pkg installation
+[33m7b9e901[m added 2 pkgs to install
+[33m890d323[m fixed install confirmation
+[33m351fb5a[m fixed small mistake
+[33m88a1bd1[m added crontab + ufw + openntpd + py-dbus-next + 🍋🍇🩺🍅 + notify-send-py to finish_install.sh
+[33m06b44a3[m finished script
+[33m4b2fb9b[m added updates to finish_install.sh
+[33m208a864[m lil update
+[33m38d4048[m finished script by adding finish_install.sh
+[33m388d765[m added confirm_in func to config_fresh_install.sh
+[33md96e03c[m added config_fresh_install.sh finish_install.sh
+[33m81bb200[m lil update:
+[33m02d3901[m added scripts to install essential packages, chroot, and then configure base install
+[33m878c7cc[m added genfstab stuff
+[33m771facb[m fixed formatting and such
+[33m8fcc339[m removed mounting by partition name and added mounting by partition number
+[33m97559ed[m FUCK
+[33ma9b8581[m mount partitions function added
+[33ma94a9b0[m added formating FS and mounting partitions
+[33mbcf0f35[m replacing fdisk with parted
+[33me8b683d[m small change made for fdisk input str
+[33mbe64bb4[m added changing partition table types
+[33m0e2847e[m created format_n_mount.sh

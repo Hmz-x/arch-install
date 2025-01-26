@@ -54,20 +54,44 @@ create_partition_table()
     echo "Creating new $partition_table partition table on $largest_disk"
     parted -s "$largest_disk" mklabel "$partition_table"
 
+    # Display the size of the largest disk
+    disk_size=$(lsblk -dno SIZE "$largest_disk")
+    echo "Disk Size of $largest_disk: $disk_size"
+
     # Create partitions
-    echo "Creating Boot partition..."
-    parted -s "$largest_disk" mkpart primary fat32 1MiB 513MiB
+    echo "Creating Boot partition (1024 MiB)..."
+    parted -s "$largest_disk" mkpart primary fat32 1MiB 1025MiB
     [ "$boot_sys" = "UEFI" ] && parted -s "$largest_disk" set 1 boot on
 
-    echo "Creating SWAP partition..."
-    parted -s "$largest_disk" mkpart primary linux-swap 513MiB 4617MiB
+    echo "Creating ROOT partition (50 GiB)..."
+    parted -s "$largest_disk" mkpart primary ext4 1025MiB 51225MiB
 
-    echo "Creating ROOT partition..."
-    parted -s "$largest_disk" mkpart primary ext4 4617MiB 49664MiB
+    # Create SWAP partition
+    echo "Creating SWAP partition (16 GiB)..."
+    home_start_mib=$((51225 + 16384))  # Reserve 16 GiB for SWAP
+    parted -s "$largest_disk" mkpart primary linux-swap 51225MiB "$home_start_mib"MiB
 
-    echo "Creating HOME partition..."
-    parted -s "$largest_disk" mkpart primary ext4 49664MiB 100%
+    # Calculate remaining free space
+    total_disk_size_mib=$(lsblk -dno SIZE "$largest_disk" | awk '{print int($1*1024)}')  # Convert GiB to MiB
+    free_space_mib=$((total_disk_size_mib - home_start_mib))
+    free_space_gib=$((free_space_mib / 1024))
 
+    echo "Remaining free space: ${free_space_gib} GiB"
+
+    # Ask user for HOME partition size
+    read -rp "Enter size for HOME partition in GiB (max: ${free_space_gib} GiB): " home_size_gb
+    if ! [[ "$home_size_gb" =~ ^[0-9]+$ ]] || [ "$home_size_gb" -gt "$free_space_gib" ]; then
+        echo "Invalid input. Defaulting HOME partition size to 256 GiB."
+        home_size_gb=256
+    fi
+
+    home_size_mib=$((home_size_gb * 1024))
+    home_end_mib=$((home_start_mib + home_size_mib))
+
+    echo "Creating HOME partition (${home_size_gb} GiB)..."
+    parted -s "$largest_disk" mkpart primary ext4 "${home_start_mib}MiB" "${home_end_mib}MiB"
+
+    echo "Partitioning completed successfully."
     echo -e "\n\n"
 }
 
