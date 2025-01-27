@@ -48,6 +48,12 @@ get_username()
 	id "$user" &> /dev/null || { useradd "$user" && passwd "$user"; }
 }
 
+compile_multi_threads()
+{
+  echo 'MAKEFLAGS="-j$(($(nproc --all) - 1))"' >> /etc/makepkg.conf
+}
+
+
 install_loop()
 {
     pkgs_arr=("$@")
@@ -185,6 +191,8 @@ set_services()
 }
 
 get_username
+
+compile_multi_threads
 
 install_pkgs
 
