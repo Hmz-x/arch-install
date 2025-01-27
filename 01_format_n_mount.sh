@@ -150,16 +150,16 @@ verify_partition_table()
     echo -e "\n\n"
 
     echo "Displaying results for 'genfstab -U /mnt'"
-    echo "If boot partition does not show simply (re)mount ${disk_partition}1 to /mnt/boot"
+    echo "If boot partition does not show simply (re)mount ${disk_partition}1 to /mnt/boot/efi"
     genfstab -U /mnt
     [ ! -d /mnt/etc ] && mkdir /mnt/etc
     echo -e "\n\n"
 
-    read -rp "Mount ${disk_partition}1 to /mnt/boot [y/n]:" ans
+    read -rp "Mount ${disk_partition}1 to /mnt/boot/efi [y/n]:" ans
     confirm_in "$ans" || return
 
-    [ ! -d /mnt/boot ] && mkdir /mnt/boot
-    mount "${disk_partition}1" /mnt/boot
+    [ ! -d /mnt/boot/efi ] && mkdir /mnt/boot/efi
+    mount "${disk_partition}1" /mnt/boot/efi
 
     echo -e "\n\nNew genfstab output:"
     genfstab -U /mnt
@@ -198,8 +198,8 @@ add_boot_to_fstab() {
 
     # Add the boot partition entry to /mnt/etc/fstab
     echo "# ${disk_partition}1" >> /mnt/etc/fstab
-    echo "UUID=$boot_uuid  /boot  vfat  rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro  0 2" >> /mnt/etc/fstab
-    echo "Boot partition added to /mnt/etc/fstab:"
+    echo "UUID=$boot_uuid /boot/efi  vfat  rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro  0 2" >> /mnt/etc/fstab
+    echo "Boot partition (/boot/efi) added to /mnt/etc/fstab:"
     tail -n 2 /mnt/etc/fstab
 }
 
