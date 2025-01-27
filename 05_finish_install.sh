@@ -103,7 +103,8 @@ set_vim_plugins()
 
 set_tmux_plugin_manager()
 {
-  git clone https://github.com/tmux-plugins/tpm "/home/${user}/tmux/plugins/tpm"
+  git clone https://github.com/tmux-plugins/tpm "/home/${user}/.tmux/plugins/tpm"
+  "/home/${user}/.tmux/plugins/tpm/bin/install_plugins"
 }
 
 install_vscode_extensions()
