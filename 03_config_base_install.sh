@@ -91,9 +91,15 @@ set_bootloader()
 
     grub-install --recheck "$largest_disk"
 	else
-		grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+		grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
+
+  if ! mount | grep -q '/mnt/boot/efi'; then
+    echo "Error: Nothing is mounted to /boot/efi."
+  else
+    echo "Successfully mounted boot partition to /boot/efi."
+  fi
 }
 
 # Check if script is being run as root

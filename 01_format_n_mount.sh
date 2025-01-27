@@ -103,6 +103,7 @@ create_fs()
     if [ "$boot_sys" = "UEFI" ]; then
       echo "Formatting BOOT partition as FAT32..."
       mkfs.fat -F32 "${disk_partition}1"
+      parted "${disk_partition}1" set 1 esp on
     else
       echo "Formatting BOOT partition as ext4..."
       mkfs.ext4 "${disk_partition}1"
@@ -122,9 +123,9 @@ create_fs()
 
 mount_partitions()
 {
-    echo "Mounting BOOT partition to /mnt/boot..."
-    [ ! -d /mnt/boot ] && mkdir /mnt/boot
-    mount "${disk_partition}1" /mnt/boot
+    echo "Mounting BOOT partition to /mnt/boot/efi..."
+    [ ! -d /mnt/boot/efi ] && mkdir -p /mnt/boot/efi
+    mount "${disk_partition}1" /mnt/boot/efi
 
     echo "Activating SWAP partition..."
     swapon "${disk_partition}2"
