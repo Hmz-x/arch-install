@@ -1,63 +1,59 @@
 #!/bin/bash
 
 # Default wallpaper image source
-DEF_IMG_SRC="https://archive.org/download/metro-zu-art-1/1029179.jpg"
+DEF_IMG_SRC="https://archive.org/download/way_20250916/way.jpg"
 
 # Non-graphical packages
-NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "npm" \
-  "nodejs" "cargo" "ripgrep" "tailscale" "fastfetch" "go" "fakeroot" "debugedit" "cmake" \
-  "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion" \
-  "starship" "mosh" "pass" "pipewire-pulse" "python-psutil" "man-pages" "man-db" \
-  "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose" \
-  "openntpd" "cronie" "ufw" "wget" "networkmanager" "wireshark-qt" "wl-clipboard" "wtype" \
-  "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard" "rtkit" "shellcheck" \
-  "alsa-firmware" "alsa-tools" "alsa-utils" "autoconf" "automake" "libdaq" "libdnet" \
-  "flex" "hwloc" "tor" "nmap" "proxychains-ng" "android-sdk-platform-tools" \
+NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "npm"
+  "nodejs" "cargo" "ripgrep" "tailscale" "fastfetch" "go" "fakeroot" "debugedit" "cmake"
+  "cxxopts" "timeshift" "tree" "openssh" "pkgconf" "python-pkgconfig" "bash-completion"
+  "starship" "mosh" "pass" "pipewire-pulse" "python-psutil" "man-pages" "man-db"
+  "unzip" "rar" "kubectl" "kube-proxy" "kubelet" "minikube" "docker-compose"
+  "openntpd" "cronie" "ufw" "wget" "networkmanager" "wireshark-qt" "wl-clipboard" "wtype"
+  "wofi" "xorg-server" "xorg-xinit" "xsel" "xclip" "xorg-xclipboard" "rtkit" "shellcheck"
+  "alsa-firmware" "alsa-tools" "alsa-utils" "autoconf" "automake" "libdaq" "libdnet"
+  "flex" "hwloc" "tor" "nmap" "proxychains-ng" "android-sdk-platform-tools"
   "android-udev" "bc" "yq" "entr")
 
 # Graphical packages (via pacman)
-G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott" \
-  "wlsunset" "polkit-kde-agent" "ly" "firefox" "dolphin" "qt6ct" "rofi" "imagemagick" "bluez" \
-  "bluez-utils" "pavucontrol" "rofimoji" "alacritty" "brightnessctl" "pamixer" "xorg-xwayland" \
-  "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers" \
-  "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts" \
-  "noto-fonts-emoji" "python-dbus-next" "notification-daemon" "mpv" \
-  "sof-firmware" "vulkan-radeon" "bluez" "blueman" "code")
+G_PACKAGES_ARR=("wayland" "qtile" "wlroots" "wlr-protocols" "python-pywlroots" "pipewire" "fnott"
+  "wlsunset" "polkit-kde-agent" "ly" "firefox" "dolphin" "qt6ct" "rofi" "imagemagick" "bluez"
+  "bluez-utils" "pavucontrol" "rofimoji" "alacritty" "brightnessctl" "pamixer" "xorg-xwayland"
+  "signal-desktop" "grim" "speedcrunch" "virtualbox" "virtualbox-host-dkms" "linux-zen-headers"
+  "deluge-gtk" "sxiv" "emoji-font" "nerd-fonts" "otf-font-awesome" "ttf-font-awesome" "noto-fonts"
+  "noto-fonts-emoji" "python-dbus-next" "notification-daemon" "mpv"
+  "sof-firmware" "vulkan-radeon" "bluez" "blueman")
 
 # Graphical packages (via yay)
-YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git" \
-  "notify-send-py" "slack-desktop-wayland") 
+YAY_G_PACKAGES_ARR=("mullvad-vpn-bin" "beeper-latest-bin" "swaylock-effects-git"
+  "notify-send-py" "slack-desktop-wayland")
 
-confirm_in()
-{
-	input="$1"
-	read -rp "${input} - confirm input [Y/n]: " user_ans
+confirm_in() {
+  input="$1"
+  read -rp "${input} - confirm input [Y/n]: " user_ans
 
-	if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
-		echo "Input is not confirmed. Returning." 2>&1
-		return 1
-	fi
+  if [ -n "$user_ans" ] && [ "$user_ans" != "y" ] && [ "$user_ans" != "Y" ]; then
+    echo "Input is not confirmed. Returning." 2>&1
+    return 1
+  fi
 }
 
-get_username()
-{
-	read -rp "Enter username: " user
-	confirm_in "$user" || exit 1
+get_username() {
+  read -rp "Enter username: " user
+  confirm_in "$user" || exit 1
 
-	# Add user if user does not exist on system
-	id "$user" &> /dev/null || { useradd "$user" && passwd "$user"; }
+  # Add user if user does not exist on system
+  id "$user" &>/dev/null || { useradd "$user" && passwd "$user"; }
 }
 
-install_loop()
-{
-    pkgs_arr=("$@")
-    for pkg in "${pkgs_arr[@]}"; do
-        sudo pacman --needed --noconfirm -S "$pkg"
-    done
+install_loop() {
+  pkgs_arr=("$@")
+  for pkg in "${pkgs_arr[@]}"; do
+    sudo pacman --needed --noconfirm -S "$pkg"
+  done
 }
 
-install_pkgs()
-{
+install_pkgs() {
   # Update & upgrade system, then install Non-graphical pkgs
   sudo pacman --noconfirm -Syu
   echo "Installing: ${NG_PACKAGES_ARR[*]}.."
@@ -69,10 +65,9 @@ ${G_PACKAGES_ARR[*]}" || return
   install_loop "${G_PACKAGES_ARR[@]}"
 }
 
-install_yay()
-{	
+install_yay() {
   YAY_REPO='https://aur.archlinux.org/yay.git'
-	cd "/home/${user}/.local/builds" && git clone "$YAY_REPO" && cd yay && makepkg -si
+  cd "/home/${user}/.local/builds" && git clone "$YAY_REPO" && cd yay && makepkg -si
 
   # Install yay packages
   yay --noconfirm -Syu
@@ -81,27 +76,30 @@ ${YAY_G_PACKAGES_ARR[*]}" || return
   yay --needed --noconfirm -S "${YAY_G_PACKAGES_ARR[@]}"
 }
 
-install_lunarvim()
-{
-
+install_lunarvim() {
   confirm_in "Continue to installation of lvim" || return
   LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh)
 }
 
-set_vim_plugins()
-{
-	git clone https://github.com/VundleVim/Vundle.vim.git \
-		"/home/${user}/.vim/bundle/Vundle.vim"
-	vim +PluginInstall +qall
+install_lazyvim() {
+  confirm_in "Continue to installation of lazyvim" || return
+  nvim_conf_dir="/home/${user}/.config/nvim"
+  [ -d "$nvim_conf_dir" ] && rm -rf "$nvim_conf_dir"
+  git clone https://github.com/LazyVim/starter "$nvim_conf_dir"
+  rm -rf "$nvim_conf_dir/.git"
 }
 
-set_tmux_plugin_manager()
-{
+set_vim_plugins() {
+  git clone https://github.com/VundleVim/Vundle.vim.git \
+    "/home/${user}/.vim/bundle/Vundle.vim"
+  vim +PluginInstall +qall
+}
+
+set_tmux_plugin_manager() {
   git clone https://github.com/tmux-plugins/tpm "/home/${user}/tmux/plugins/tpm"
 }
 
-install_vscode_extensions()
-{
+install_vscode_extensions() {
   echo "Installing VS Code extensions..."
 
   # JS
@@ -124,9 +122,9 @@ install_vscode_extensions()
   code --install-extension timonwong.shellcheck
 
   # Bash
-  code --install-extension mads-hartmann.bash-ide-vscode    # Bash language server
-  code --install-extension timonwong.shellcheck            # Linter for shell scripts
-  code --install-extension foxundermoon.shell-format       # Shell script formatter
+  code --install-extension mads-hartmann.bash-ide-vscode # Bash language server
+  code --install-extension timonwong.shellcheck          # Linter for shell scripts
+  code --install-extension foxundermoon.shell-format     # Shell script formatter
 
   # Misc
   code --install-extension eamodio.gitlens
@@ -137,17 +135,16 @@ install_vscode_extensions()
   code --install-extension vscodevim.vim
 }
 
-configure_env()
-{
+configure_env() {
   # ssh
   echo "Running ssh-keygen..."
-  ssh-keygen 
+  ssh-keygen
 
   # download the default wallpaper image to ~/Documents/pics/wallpaper just so qtile works properly
   curl "$DEF_IMG_SRC" -Lo ~/Documents/pics/wallpaper/default.jpeg
 
   # git
-	git config --global credential.helper store
+  git config --global credential.helper store
 
   # docker
   usermod "$user" -aG docker
@@ -172,8 +169,7 @@ configure_env()
   sudo ln -sf ~/.local/bin/saphyra/saphyra.py /usr/local/bin/saphyra.py
 }
 
-set_services()
-{
+set_services() {
   systemctl --user enable --now pipewire
   systemctl --user enable --now pipewire-pulse
   sudo systemctl enable --now NetworkManager
@@ -190,13 +186,15 @@ install_pkgs
 
 install_yay
 
-install_lunarvim
+install_lazyvim
+
+#install_lunarvim
 
 set_vim_plugins
 
 set_tmux_plugin_manager
 
-install_vscode_extensions
+#install_vscode_extensions
 
 configure_env
 
