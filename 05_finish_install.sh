@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default wallpaper image source
-DEF_IMG_SRC="https://archive.org/download/way_20250916/way.jpg"
+DEF_IMG_SRC="https://archive.org/download/github.com-Tux-CSV_-_2025-08-04_13-41-32/cover.jpg"
 
 # Non-graphical packages
 NG_PACKAGES_ARR=("vim" "rsync" "neovim" "tmux" "docker" "figlet" "make" "python-pip" "npm"
